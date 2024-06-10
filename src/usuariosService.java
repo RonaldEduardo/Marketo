@@ -42,17 +42,19 @@ public class usuariosService {
   public List<Usuario> adicionarUsuario(List<Setor> setores) {
     setorService setorService = new setorService(setores);
 
-    Scanner scan = new Scanner(System.in);
-    System.out.println("Digite o nome do usuário: ");
-    String nome = scan.next();
-    System.out.println("Digite o email do usuário: ");
-    String email = scan.next();
-    System.out.println("Selecione o setor do usuário: ");
-    setorService.listarSetores();
-    int escolhaSetor = scan.nextInt() - 1;
-    scan.nextLine();
-    String setor = setorService.nomesSetores().get(escolhaSetor);
-    return criaUsuarios(nome, email, setor);
+    try (Scanner scan = new Scanner(System.in)) {
+        // your code that uses the Scanner object
+        System.out.println("Digite o nome do usuário: ");
+        String nome = scan.next();
+        System.out.println("Digite o email do usuário: ");
+        String email = scan.next();
+        System.out.println("Selecione o setor do usuário: ");
+        setorService.listarSetores();
+        int escolhaSetor = scan.nextInt() - 1;
+        scan.nextLine();
+        String setor = setorService.nomesSetores().get(escolhaSetor);
+        return criaUsuarios(nome, email, setor);
+    }
   }
 
   private List<Usuario> criaUsuarios(String nome, String email, String setor) {
