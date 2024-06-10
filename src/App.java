@@ -4,9 +4,10 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        final String MENU = "1 - Listar Usuários\n2 - Cadastrar Usuário\n3 - Listar Setores\n4 - Cadastrar Setor\n5 - Listar Tarefas\n6 - Cadastrar Tarefa\n7 - Sair\n";
+        final String MENU = "\n============================================\n1 - Listar Usuários\n2 - Cadastrar Usuário\n3 - Listar Setores\n4 - Cadastrar Setor\n5 - Listar Tarefas\n6 - Cadastrar Tarefa\n7 - Sair\n\n";
         Scanner scan = new Scanner(System.in);
         int escolhaUser;
+        boolean loopMenu = true;
 
 
         List<Setor> setores = List.of(
@@ -29,30 +30,28 @@ public class App {
 
         usuariosService usuariosService = new usuariosService(usuarios);
 
-        System.out.printf(MENU);
-        escolhaUser = scan.nextInt();
+        while(loopMenu) {
+            System.out.printf(MENU);
+            escolhaUser = scan.nextInt();
 
-        switch(escolhaUser){
-            case 1:
-                usuariosService.listarNomesUsuarios();
-                break;
-            case 2:
-                System.out.println("Digite o nome do usuário: ");
-                String nome = scan.next();
-                System.out.println("Digite o email do usuário: ");
-                String email = scan.next();
-                System.out.println("Selecione o setor do usuário: ");
-                setorService.listarSetores();
-                int escolhaSetor = scan.nextInt() + 1;
-                String setor = setorService.nomesSetores().get(escolhaSetor);
-                usuariosService.criaUsuarios(nome, email, setor);
-                break;
-            case 3:
-                setorService.listarSetores();
-                break;
-            default:
-                System.out.println("Opção inválida");
+            switch(escolhaUser){
+                case 1:
+                    usuariosService.listarNomesUsuarios();
+                    break;
+                case 2:
+                    usuariosService.adicionarUsuario(setores);
+                    break;
+                case 3:
+                    setorService.listarSetores();
+                    break;
+                case 7:
+                    loopMenu = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida");
+            }
         }
         scan.close();
     }
+
 }
