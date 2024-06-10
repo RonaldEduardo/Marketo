@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        final String MENU = "\n============================================\n1 - Listar Usuários\n2 - Cadastrar Usuário\n3 - Listar Setores\n4 - Cadastrar Setor\n5 - Listar Tarefas\n6 - Cadastrar Tarefa\n7 - Sair\n\n";
+        final String MENU = "\n============================\n1 - Listar Usuários\n2 - Cadastrar Usuário\n3 - Listar Setores\n4 - Cadastrar Setor\n5 - Listar Tarefas\n6 - Cadastrar Tarefa\n7 - Sair\n\n";
         Scanner scan = new Scanner(System.in);
         int escolhaUser;
         boolean loopMenu = true;
@@ -44,7 +44,10 @@ public class App {
                 case 3:
                     setorService.listarSetores();
                     break;
-                case 7:
+                case 4:
+                    setorService.adicionarSetor();
+                    break;
+                case 0:
                     loopMenu = false;
                     break;
                 default:
