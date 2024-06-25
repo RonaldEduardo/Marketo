@@ -1,3 +1,4 @@
+package model;
 public class Usuario {
   final private int id;
   final private String nome;

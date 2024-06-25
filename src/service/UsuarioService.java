@@ -1,16 +1,19 @@
+package service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class usuariosService {
+import model.Usuario;
+
+public class UsuarioService {
   private final List<Usuario> usuarios;
 
-  public usuariosService(List<Usuario> usuarios) {
+  public UsuarioService(List<Usuario> usuarios) {
     this.usuarios = usuarios;
   }
 
-  private List<String> nomesUsuarios() {
+  public List<String> nomesUsuarios() {
     List<String> nomeUsuario = usuarios.stream()
         .map(Usuario::getNome)
         .collect(Collectors.toList());
@@ -32,35 +35,18 @@ public class usuariosService {
     List<String> ids = idsUsuarios();
 
     for (int i = 0; i < nomes.size(); i++) {
-        String nomeId = ids.get(i) + " - " + nomes.get(i);
+        String nomeId = ids.get(i) + " - " + nomes.get(i) + ", Setor: " + usuarios.get(i).getSetor();
         nomesIdsUsuarios.add(nomeId);
     }
-
     nomesIdsUsuarios.forEach(System.out::println);
   }
 
-  public List<Usuario> adicionarUsuario(List<Setor> setores) {
-    setorService setorService = new setorService(setores);
 
-    try (Scanner scan = new Scanner(System.in)) {
-        // your code that uses the Scanner object
-        System.out.println("Digite o nome do usuário: ");
-        String nome = scan.next();
-        System.out.println("Digite o email do usuário: ");
-        String email = scan.next();
-        System.out.println("Selecione o setor do usuário: ");
-        setorService.listarSetores();
-        int escolhaSetor = scan.nextInt() - 1;
-        scan.nextLine();
-        String setor = setorService.nomesSetores().get(escolhaSetor);
-        return criaUsuarios(nome, email, setor);
-    }
-  }
-
-  private List<Usuario> criaUsuarios(String nome, String email, String setor) {
+  public List<Usuario> criaUsuarios(String nome, String email, String setor) {
     Usuario usuario = new Usuario(usuarios.size() + 1, nome, email, setor);
     usuarios.add(usuario);
     return usuarios;
   }
+
 
 }

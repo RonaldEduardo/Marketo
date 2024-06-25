@@ -1,3 +1,4 @@
+package model;
 public class Setor {
   final private String nome;
   final private String descricao;

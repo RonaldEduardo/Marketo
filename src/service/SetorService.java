@@ -1,12 +1,15 @@
+package service;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class setorService {
+import model.Setor;
+
+public class SetorService {
   private final List<Setor> setores;
 
 
-  public setorService(List<Setor> setores) {
+  public SetorService(List<Setor> setores) {
     this.setores = setores;
   }
 

@@ -2,12 +2,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import model.Setor;
+import model.Tarefa;
+import model.Usuario;
+import service.SetorService;
+import service.TarefasService;
+import service.UsuarioService;
+import util.UserInteract;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        final String MENU = "\n============================\n1 - Listar Usuários\n2 - Cadastrar Usuário\n3 - Listar Setores\n4 - Cadastrar Setor\n5 - Listar Tarefas\n6 - Cadastrar Tarefa\n7 - Sair\n\n";
         Scanner scan = new Scanner(System.in);
-        int escolhaUser;
-        boolean loopMenu = true;
 
 
         List<Setor> setores = List.of(
@@ -15,7 +20,7 @@ public class App {
             new Setor("RH", "Recursos Humanos"),
             new Setor("Financeiro", "Financeiro")
         );
-        setorService setorService = new setorService(setores);
+        SetorService setorService = new SetorService(setores);
 
         String setorTI = setorService.nomesSetores().get(0);
         String setorMarketing = setorService.nomesSetores().get(1);
@@ -28,33 +33,12 @@ public class App {
             new Usuario(3, "José", "jose@exemplo.com", setorFinanceiro)
         ));
 
-        usuariosService usuariosService = new usuariosService(usuarios);
+        UsuarioService usuariosService = new UsuarioService(usuarios);
+        TarefasService tarefaService = new TarefasService(new ArrayList<>());
 
-        while(loopMenu) {
-            System.out.printf(MENU);
-            escolhaUser = scan.nextInt();
+        UserInteract userInteract = new UserInteract(setorService, usuariosService, usuarios, setores, tarefaService);
 
-            switch(escolhaUser){
-                case 1:
-                    usuariosService.listarNomesUsuarios();
-                    break;
-                case 2:
-                    usuariosService.adicionarUsuario(setores);
-                    break;
-                case 3:
-                    setorService.listarSetores();
-                    break;
-                case 4:
-                    setorService.adicionarSetor();
-                    break;
-                case 0:
-                    loopMenu = false;
-                    break;
-                default:
-                    System.out.println("Opção inválida");
-            }
-        }
-        scan.close();
+        userInteract.menu(scan);
     }
 
 }
