@@ -1,10 +1,10 @@
 package service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import model.Usuario;
+
+
 
 public class UsuarioService {
   private final List<Usuario> usuarios;
@@ -13,40 +13,25 @@ public class UsuarioService {
     this.usuarios = usuarios;
   }
 
+  // Retorna uma lista de nomes de usuários
   public List<String> nomesUsuarios() {
-    List<String> nomeUsuario = usuarios.stream()
+    return usuarios.stream()
         .map(Usuario::getNome)
         .collect(Collectors.toList());
-    return nomeUsuario;
   }
 
-  private List<String> idsUsuarios() {
-    List<String> idUsuarios = usuarios.stream()
-        .map(Usuario::getId)
-        .map(Object::toString)
-        .collect(Collectors.toList());
-
-    return idUsuarios;
-  }
-
+  // Lista os nomes dos usuários no console
   public void listarNomesUsuarios() {
-    List<String> nomesIdsUsuarios = new ArrayList<>();
-    List<String> nomes = nomesUsuarios();
-    List<String> ids = idsUsuarios();
-
-    for (int i = 0; i < nomes.size(); i++) {
-        String nomeId = ids.get(i) + " - " + nomes.get(i) + ", Setor: " + usuarios.get(i).getSetor();
-        nomesIdsUsuarios.add(nomeId);
-    }
-    nomesIdsUsuarios.forEach(System.out::println);
+    usuarios.forEach(usuario -> {
+      String nomeId = usuario.getId() + " - " + usuario.getNome() + ", Setor: " + usuario.getSetor();
+      System.out.println(nomeId);
+    });
   }
 
-
+  // Cria um novo usuário com os dados fornecidos e adiciona à lista de usuários
   public List<Usuario> criaUsuarios(String nome, String email, String setor) {
     Usuario usuario = new Usuario(usuarios.size() + 1, nome, email, setor);
     usuarios.add(usuario);
     return usuarios;
   }
-
-
 }

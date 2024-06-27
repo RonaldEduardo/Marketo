@@ -1,128 +1,146 @@
 package util;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import model.Setor;
-import model.Tarefa;
-import model.Usuario;
 import service.SetorService;
 import service.TarefasService;
 import service.UsuarioService;
 
-public class UserInteract {
-  private SetorService setoresService;
-  private UsuarioService usuariosService;
-  private List<Usuario> usuarios;
-  private List<Setor> setores;
-  private TarefasService tarefasService;
 
-  public UserInteract(SetorService setoresService, UsuarioService usuariosService, List<Usuario> usuarios,List<Setor> setores, TarefasService tarefasService) {
+public class UserInteract {
+  private final SetorService setoresService;
+  private final UsuarioService usuariosService;
+  private final TarefasService tarefasService;
+
+  public UserInteract(SetorService setoresService, UsuarioService usuariosService, TarefasService tarefasService) {
     this.setoresService = setoresService;
     this.usuariosService = usuariosService;
-    this.usuarios = usuarios;
-    this.setores = setores;
     this.tarefasService = tarefasService;
   }
 
   public void menu(Scanner scan) {
     final String MENU = "\n============================\n1 - Listar Usuários\n2 - Cadastrar Usuário\n3 - Listar Setores\n4 - Cadastrar Setor\n5 - Cadastrar Tarefa\n6 - Listar Tarefas\n7 - Sair\n\n";
+    final String INVALID_OPTION = "Opção inválida";
     boolean loopMenu = true;
-    int escolhaUser;
 
     while (loopMenu) {
       System.out.printf(MENU);
-      escolhaUser = scan.nextInt();
+      int escolhaUser = scan.nextInt();
+      scan.nextLine();
 
       switch (escolhaUser) {
         case 1:
-          usuariosService.listarNomesUsuarios();
+          usuariosService.listarNomesUsuarios(); // Chama o método para listar os nomes dos usuários
           break;
         case 2:
-          adicionarUsuario(scan);
+          adicionarUsuario(scan); // Chama o método para adicionar um novo usuário
           break;
         case 3:
-          setoresService.listarSetores();
+          setoresService.listarSetores(); // Chama o método para listar os setores
           break;
         case 4:
-          setoresService.adicionarSetor();
+          adicionarSetor(scan); // Chama o método para adicionar um novo setor
           break;
         case 5:
-          adicionarTarefa(scan);
+          adicionarTarefa(scan); // Chama o método para adicionar uma nova tarefa
           break;
         case 6:
-          tarefasService.listarTarefas();
+          tarefasService.listarTarefas(); // Chama o método para listar as tarefas
           break;
-        case 0:
-          loopMenu = false;
+        case 7:
+          loopMenu = false; // Sai do loop do menu
           break;
         default:
-          System.out.println("Opção inválida");
+          System.out.println(INVALID_OPTION); // Exibe uma mensagem de opção inválida
       }
     }
-    scan.close();
+    scan.close(); // Fecha o Scanner
+  }
+
+  private void adicionarUsuario(Scanner scan) {
+    String nome = getNome(scan); // Chama o método para obter o nome do usuário
+    String email = getEmail(scan); // Chama o método para obter o email do usuário
+    String setor = getSetor(scan); // Chama o método para obter o setor do usuário
+
+    usuariosService.criaUsuarios(nome, email, setor); // Chama o método para criar um novo usuário
   }
 
   private String getNome(Scanner scan) {
-    System.out.println("Digite o nome do usuário: ");
-    return scan.next();
+    final String PROMPT_NOME = "Digite o nome do usuário: ";
+    System.out.println(PROMPT_NOME);
+    return scan.nextLine(); // Lê a próxima linha digitada pelo usuário
   }
 
   private String getEmail(Scanner scan) {
-    System.out.println("Digite o email do usuário: ");
-    return scan.next();
+    final String PROMPT_EMAIL = "Digite o email do usuário: ";
+    System.out.println(PROMPT_EMAIL);
+    return scan.nextLine(); // Lê a próxima linha digitada pelo usuário
   }
 
   private String getSetor(Scanner scan) {
-    System.out.println("Selecione o setor do usuário: ");
-    setoresService.listarSetores();
+    final String PROMPT_SETOR = "Selecione o setor do usuário: ";
+    System.out.println(PROMPT_SETOR);
+    setoresService.listarSetores(); // Chama o método para listar os setores
     int escolhaSetor = scan.nextInt() - 1;
     scan.nextLine();
-    return setoresService.nomesSetores().get(escolhaSetor);
+    return setoresService.getNomesSetores().get(escolhaSetor); // Retorna o nome do setor escolhido pelo usuário
   }
 
-  public List<Usuario> adicionarUsuario(Scanner scan) {
-    String nome = getNome(scan);
-    String email = getEmail(scan);
-    String setor = getSetor(scan);
+  private void adicionarTarefa(Scanner scan) {
+    String titulo = getTituloTarefa(scan); // Chama o método para obter o título da tarefa
+    String descricao = getDescricaoTarefa(scan); // Chama o método para obter a descrição da tarefa
+    String responsavel = getResponsavelTarefa(scan); // Chama o método para obter o responsável pela tarefa
+    String requerente = getRequerenteTarefa(scan); // Chama o método para obter o requerente da tarefa
 
-    return usuariosService.criaUsuarios(nome, email, setor);
+    tarefasService.addTarefa(titulo, descricao, responsavel, requerente); // Chama o método para adicionar uma nova tarefa
   }
 
   private String getTituloTarefa(Scanner scan) {
-    System.out.println("Digite o título da tarefa: ");
-    return scan.next();
+    final String PROMPT_TITULO = "Digite o título da tarefa: ";
+    System.out.println(PROMPT_TITULO);
+    return scan.nextLine(); // Lê a próxima linha digitada pelo usuário
   }
 
   private String getDescricaoTarefa(Scanner scan) {
-    System.out.println("Digite a descrição da tarefa: ");
-    return scan.next();
+    final String PROMPT_DESCRICAO = "Digite a descrição da tarefa: ";
+    System.out.println(PROMPT_DESCRICAO);
+    return scan.nextLine(); // Lê a próxima linha digitada pelo usuário
   }
 
   private String getResponsavelTarefa(Scanner scan) {
-    System.out.println("Selecione o responsável pela tarefa: ");
-    usuariosService.listarNomesUsuarios();
+    final String PROMPT_RESPONSAVEL = "Selecione o responsável pela tarefa: ";
+    System.out.println(PROMPT_RESPONSAVEL);
+    usuariosService.listarNomesUsuarios(); // Chama o método para listar os nomes dos usuários
     int escolhaUsuario = scan.nextInt() - 1;
     scan.nextLine();
-    return usuariosService.nomesUsuarios().get(escolhaUsuario);
+    return usuariosService.nomesUsuarios().get(escolhaUsuario); // Retorna o nome do responsável escolhido pelo usuário
   }
 
   private String getRequerenteTarefa(Scanner scan) {
-    System.out.println("Selecione quem esta requisitando a tarefa: ");
-    usuariosService.listarNomesUsuarios();
+    final String PROMPT_REQUERENTE = "Selecione quem está requisitando a tarefa: ";
+    System.out.println(PROMPT_REQUERENTE);
+    usuariosService.listarNomesUsuarios(); // Chama o método para listar os nomes dos usuários
     int escolhaUsuario = scan.nextInt() - 1;
     scan.nextLine();
-    return usuariosService.nomesUsuarios().get(escolhaUsuario);
+    return usuariosService.nomesUsuarios().get(escolhaUsuario); // Retorna o nome do requerente escolhido pelo usuário
   }
 
-  public List<Tarefa> adicionarTarefa(Scanner scan) {
-      String titulo = getTituloTarefa(scan);
-      String descricao = getDescricaoTarefa(scan);
-      String responsavel = getResponsavelTarefa(scan);
-      String requerente = getRequerenteTarefa(scan);
-
-      return tarefasService.addTarefa(titulo, descricao, responsavel, requerente);
+  public List<Setor> adicionarSetor(Scanner scan) {
+    String nome = getSetorByName(scan); // Chama o método para obter o nome do setor
+    String descricao = getDescricaoSetor(scan); // Chama o método para obter a descrição do setor
+    return setoresService.criaSetor(nome, descricao); // Chama o método para criar um novo setor
   }
 
+  private String getSetorByName(Scanner scan) {
+    System.out.println("Digite o nome do setor: ");
+    final String nome = scan.next();
+    return nome;
+  }
+
+  private String getDescricaoSetor(Scanner scan) {
+    System.out.println("Digite a descrição do setor: ");
+    final String descricao = scan.next();
+    return descricao;
+  }
 }
