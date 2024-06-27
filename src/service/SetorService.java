@@ -19,12 +19,6 @@ public class SetorService {
         .collect(Collectors.toList());
   }
 
-  // Retorna uma lista com as descrições dos setores (método privado)
-  private List<String> getDescicaoSetores() {
-    return setores.stream()
-        .map(Setor::getDescricao)
-        .collect(Collectors.toList());
-  }
 
   // Lista os setores, mostrando o nome e a descrição de cada um
   public void listarSetores() {
@@ -42,8 +36,9 @@ public class SetorService {
     return setores;
   }
 
-  // Retorna o nome do setor correspondente ao nome fornecido, ignorando maiúsculas e minúsculas
-  public String getSetorByName(final String nome) {
+  // Retorna o nome do setor correspondente ao nome fornecido, ignorando
+  // maiúsculas e minúsculas
+  public String getSetorByName(String nome) {
     for (Setor setor : setores) {
       if (setor.getNome().equalsIgnoreCase(nome)) {
         return setor.getNome();
